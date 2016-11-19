@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'santa',
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
 CSRF_COOKIE_HTTPONLY = True
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
