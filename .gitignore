@@ -90,3 +90,6 @@ ENV/
 
 # django static files
 staticfiles/
+
+# development environment variable
+environment.sh
