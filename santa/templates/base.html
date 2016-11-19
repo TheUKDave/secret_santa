@@ -1,0 +1,23 @@
+<html lang="en-gb" dir="rtl">
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{% static "base.css" %}" />
+        {% block extrastyle %}{% endblock %}
+        {% block extrahead %}{% endblock %}
+    </head>
+    <body class="{% block bodyclass %}{% endblock %}">
+
+        <header>
+            {% block header %}{% endblock %}
+        </header>
+
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            {% block footer %}{% endblock %}
+        </footer>
+
+    </body>
+</html>
