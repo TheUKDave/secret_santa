@@ -1,5 +1,5 @@
 """
-WSGI config for santa project.
+WSGI config for secret_santa project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "santa.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "secret_santa.settings.prod")
 
 application = get_wsgi_application()
