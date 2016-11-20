@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load utils %}
+
 {% block content %}
     <h1>Thank you, your Secret Santa list has been created</h1>
     <p>To <a href="{% url 'santa:signup' object.secure_hash object.slug %}">sign up to this list</a> as a participant, and to get others to participate, please use:</p>
-    <p><a href="{% url 'santa:signup' object.secure_hash object.slug %}">{% url 'santa:signup' object.secure_hash object.slug %}</a></p>
+    <p><a href="{% url 'santa:signup' object.secure_hash object.slug %}">{% get_full_url 'santa:signup' object.secure_hash object.slug %}</a></p>
 {% endblock %}
