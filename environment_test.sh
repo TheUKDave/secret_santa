@@ -1,3 +1,7 @@
 export DJANGO_SETTINGS_MODULE='secret_santa.settings.prod'
 export DATABASE_URL='postgres://localhost/santa'
 export SECRET_KEY='TEST_SECRET_KEY'
+export EMAIL_HOST=''
+export EMAIL_PORT='0'
+export EMAIL_HOST_USER=''
+export EMAIL_HOST_PASSWORD=''
