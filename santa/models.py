@@ -1,5 +1,6 @@
 import random
 import itertools
+import hashlib
 
 from django.db import models
 from django.core.mail import send_mass_mail
@@ -12,6 +13,7 @@ class SantaList(models.Model):
     slug = models.SlugField(unique=True)
     email_subject = models.CharField(max_length=200)
     email_content = models.TextField()
+    secure_hash = models.CharField(max_length=12, unique=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -25,6 +27,11 @@ class SantaList(models.Model):
             self.slug = '%s-%d' % (orig_slug, i)
 
         super().save(*args, **kwargs)
+
+        if not self.secure_hash:
+            token = "{0}{1}".format(self.pk, self.slug)
+            self.secure_hash = hashlib.md5(token.encode('utf-8')).hexdigest()[:12]
+            self.save()
 
     def get_email_data(self, pairs):
         data_list = []
