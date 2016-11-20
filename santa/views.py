@@ -8,7 +8,7 @@ from .models import SantaList, Person
 
 
 class HomepageView(TemplateView):
-    template_name = 'homepage.html'
+    template_name = 'santa/homepage.html'
 
 
 class ListCreationView(CreateView):

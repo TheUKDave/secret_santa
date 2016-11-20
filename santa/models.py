@@ -3,17 +3,22 @@ import itertools
 import hashlib
 
 from django.db import models
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mass_mail, send_mail
 from django.conf import settings
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse
 
 
 class SantaList(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
+    organiser_email = models.EmailField(max_length=200, verbose_name="Your email")
     email_subject = models.CharField(max_length=200)
     email_content = models.TextField()
     secure_hash = models.CharField(max_length=12, unique=True, null=True)
+
+    def __str__(self):
+        return "{0}".format(self.name)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -32,6 +37,14 @@ class SantaList(models.Model):
             token = "{0}{1}".format(self.pk, self.slug)
             self.secure_hash = hashlib.md5(token.encode('utf-8')).hexdigest()[:12]
             self.save()
+        else:
+            path = reverse('santa:signup', kwargs={'secure_hash': self.secure_hash, 'slug': self.slug})
+            send_mail(
+                'You created a Secret Santa list',
+                'Here is the link: {0}'.format(path),
+                settings.DEFAULT_FROM_EMAIL,
+                [self.organiser_email]
+            )
 
     def get_email_data(self, pairs):
         data_list = []
@@ -39,7 +52,7 @@ class SantaList(models.Model):
             email_to = [giver.email]
             content = self.email_content.format(giver=giver.name, receiver=receiver.name)
             subject = self.email_subject.format(giver=giver.name, receiver=receiver.name)
-            data_item = (subject, content, 'me@theukdave.com', email_to)
+            data_item = (subject, content, settings.DEFAULT_FROM_EMAIL, email_to)
             data_list.append(data_item)
 
         return tuple(data_list)
@@ -61,10 +74,12 @@ class SantaList(models.Model):
         # Return a tuple of ((giver, receiver,) ...)
         return matches.items()
 
-    def send_email(self):
+    def finish_list(self):
         pairs = self.shuffle_recipients()
         data = self.get_email_data(pairs)
-        return send_mass_mail(data)
+        send_mass_mail(data)
+        self.person_set.all().delete()
+        self.delete()
 
 
 class Person(models.Model):

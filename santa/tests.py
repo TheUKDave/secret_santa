@@ -20,4 +20,10 @@ class TestSantaList(TestCase):
     def testData(self):
         matched_pairs = self.list.shuffle_recipients()
         email_data = self.list.get_email_data(matched_pairs)
-        self.list.send_email()
+
+    def testFinishList(self):
+        self.list.finish_list()
+        list_count = SantaList.objects.count()
+        person_count = Person.objects.count()
+        self.assertEquals(list_count, 0)
+        self.assertEquals(person_count, 0)
