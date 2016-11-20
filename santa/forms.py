@@ -14,4 +14,4 @@ class ListCreationForm(forms.ModelForm):
 
     class Meta:
         model = SantaList
-        exclude = ['slug']
+        exclude = ['slug', 'secure_hash']

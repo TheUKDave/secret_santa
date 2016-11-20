@@ -32,7 +32,9 @@ class SignupView(CreateView):
     success_url = '/thanks/'
 
     def get_initial(self):
-        santa_list = get_object_or_404(SantaList, slug=self.kwargs.get('slug'))
+        slug = self.kwargs.get('slug')
+        secure_hash = self.kwargs.get('secure_hash')
+        santa_list = get_object_or_404(SantaList, slug=slug, secure_hash=secure_hash)
         return {'santa_list': santa_list}
 
 
