@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 
+from . import default_email_content_template, default_email_subject_template
 from .forms import ListCreationForm, PersonAddingForm
 from .models import SantaList, Person
 
@@ -20,6 +21,12 @@ class ListCreationView(CreateView):
 
     def get_success_url(self):
         return reverse('santa:created', kwargs={'slug': self.object.slug})
+
+    def get_initial(self):
+        return {
+            'email_content': default_email_content_template,
+            'email_subject': default_email_subject_template
+        }
 
     def form_valid(self, form):
         resp = super().form_valid(form)

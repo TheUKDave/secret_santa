@@ -16,10 +16,12 @@ label {
 }
 
 input {
-    width: 15em;
+    width: 19em;
+    font-size: 12pt
 }
 
 textarea {
-    width: 15em;
-    height: 7em;
+    font-size: 10pt;
+    width: 23em;
+    height: 18em;
 }
