@@ -49,7 +49,7 @@ class SantaList(models.Model):
     def get_email_data(self, pairs):
         data_list = []
         for giver, receiver in pairs:
-            email_to = [giver.email]
+            email_to = ["Santa's Little Helper <{0}>".format(giver.email)]
             content = self.email_content.format(giver=giver.name, receiver=receiver.name)
             subject = self.email_subject.format(giver=giver.name, receiver=receiver.name)
             data_item = (subject, content, settings.DEFAULT_FROM_EMAIL, email_to)
