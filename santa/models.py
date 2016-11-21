@@ -3,10 +3,11 @@ import itertools
 import hashlib
 
 from django.db import models
-from django.core.mail import send_mass_mail, send_mail
+from django.core.mail import send_mass_mail
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
+from django.contrib.sites.shortcuts import get_current_site
 
 
 class SantaList(models.Model):
@@ -15,10 +16,28 @@ class SantaList(models.Model):
     organiser_email = models.EmailField(max_length=200, verbose_name="Your email")
     email_subject = models.CharField(max_length=200)
     email_content = models.TextField()
-    secure_hash = models.CharField(max_length=12, unique=True, null=True)
+
+    # For people to sign up
+    secure_hash_signup = models.CharField(max_length=12, unique=True, null=True)
+    # For the organiser to review/close
+    secure_hash_review = models.CharField(max_length=12, unique=True, null=True)
 
     def __str__(self):
         return "{0}".format(self.name)
+
+    def get_signup_url(self, request):
+        current_site = get_current_site(request)
+        secure_hash = self.secure_hash_signup
+        slug = self.slug
+        signup_path = reverse('santa:signup', kwargs={'secure_hash': secure_hash, 'slug': slug})
+        return "{0}{1}".format(current_site.domain, signup_path)
+
+    def get_review_url(self, request):
+        current_site = get_current_site(request)
+        secure_hash = self.secure_hash_review
+        slug = self.slug
+        review_path = reverse('santa:review', kwargs={'secure_hash': secure_hash, 'slug': slug})
+        return "{0}{1}".format(current_site.domain, review_path)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -33,18 +52,12 @@ class SantaList(models.Model):
 
         super().save(*args, **kwargs)
 
-        if not self.secure_hash:
+        if not self.secure_hash_signup or not self.secure_hash_review:
             token = "{0}{1}".format(self.pk, self.slug)
-            self.secure_hash = hashlib.md5(token.encode('utf-8')).hexdigest()[:12]
+            md5 = hashlib.md5(token.encode('utf-8')).hexdigest()
+            self.secure_hash_signup = md5[:12]
+            self.secure_hash_review = md5[12:24]
             self.save()
-        else:
-            path = reverse('santa:signup', kwargs={'secure_hash': self.secure_hash, 'slug': self.slug})
-            send_mail(
-                'You created a Secret Santa list',
-                'Here is the link: {0}'.format(path),
-                settings.DEFAULT_FROM_EMAIL,
-                [self.organiser_email]
-            )
 
     def get_email_data(self, pairs):
         data_list = []
