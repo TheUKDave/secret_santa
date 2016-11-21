@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>You have set up your Secret Santa list</h1>
+    <p>There are currently {{ santa_list.person_set.count }} people signed up</p>
+    <p>When you are ready, <a href="{% url 'santa:close' santa_list.secure_hash_review santa_list.slug %}">close the list</a>, and Santa will email all participants</p>
+{% endblock %}

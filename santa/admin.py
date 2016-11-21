@@ -10,7 +10,7 @@ class SantaListAdmin(admin.ModelAdmin):
 
     list_display = ['name', 'organiser_email']
     ordering = ['name']
-    readonly_fields = ['slug', 'secure_hash']
+    readonly_fields = ['slug', 'secure_hash_signup', 'secure_hash_review']
 
 
 admin.site.register(SantaList, SantaListAdmin)
