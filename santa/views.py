@@ -30,7 +30,8 @@ class ListCreationView(CreateView):
 
     def form_valid(self, form):
         resp = super().form_valid(form)
-        return self.object.send_creation_email
+        self.object.send_creation_email(self.request)
+        return resp
 
 
 class ListCreatedView(DetailView):

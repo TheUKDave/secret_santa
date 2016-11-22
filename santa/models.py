@@ -42,8 +42,8 @@ class SantaList(models.Model):
         return "{0}{1}".format(current_site.domain, review_path)
 
     def send_creation_email(self, request):
-        signup_url = self.get_signup_url(self.request)
-        review_url = self.get_review_url(self.request)
+        signup_url = self.get_signup_url(request)
+        review_url = self.get_review_url(request)
         send_mail(
             creation_email_subject,
             creation_email_content.format(signup_url, review_url),

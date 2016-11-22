@@ -16,7 +16,7 @@ class TestSantaList(TestCase):
         p2 = Person.objects.create(first_name='bob', last_name='x', email='bob@example.com', santa_list=self.list)
         p3 = Person.objects.create(first_name='fred', last_name='x', email='fred@example.com', santa_list=self.list)
 
-    @patch('django.core.mail.send_mail')
+    @patch('santa.models.send_mail')
     def testCreateList(self, mail_mock):
         response = self.client.get(reverse('santa:create'))
         form_data = {
@@ -46,7 +46,7 @@ class TestSantaList(TestCase):
         matched_pairs = self.list.shuffle_recipients()
         email_data = self.list.get_email_data(matched_pairs)
 
-    @patch('django.core.mail.send_mass_mail')
+    @patch('santa.models.send_mass_mail')
     def testFinishList(self, mail_mock):
         self.list.finish_list()
         list_count = SantaList.objects.count()
