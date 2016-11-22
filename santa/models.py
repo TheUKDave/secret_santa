@@ -3,11 +3,13 @@ import itertools
 import hashlib
 
 from django.db import models
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mass_mail, send_mail
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.urlresolvers import reverse
 from django.contrib.sites.shortcuts import get_current_site
+
+from . import creation_email_subject, creation_email_content
 
 
 class SantaList(models.Model):
@@ -38,6 +40,16 @@ class SantaList(models.Model):
         slug = self.slug
         review_path = reverse('santa:review', kwargs={'secure_hash': secure_hash, 'slug': slug})
         return "{0}{1}".format(current_site.domain, review_path)
+
+    def send_creation_email(self, request):
+        signup_url = self.get_signup_url(self.request)
+        review_url = self.get_review_url(self.request)
+        send_mail(
+            creation_email_subject,
+            creation_email_content.format(signup_url, review_url),
+            settings.DEFAULT_FROM_EMAIL,
+            [self.organiser_email]
+        )
 
     def save(self, *args, **kwargs):
         if not self.slug:

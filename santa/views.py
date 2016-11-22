@@ -5,9 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 
-from . import (
-    default_email_content_template, default_email_subject_template, creation_email_content, creation_email_subject
-)
+from . import default_email_content_template, default_email_subject_template
 from .forms import ListCreationForm, PersonAddingForm
 from .models import SantaList, Person
 
@@ -32,17 +30,7 @@ class ListCreationView(CreateView):
 
     def form_valid(self, form):
         resp = super().form_valid(form)
-
-        signup_url = self.object.get_signup_url(self.request)
-        review_url = self.object.get_review_url(self.request)
-        send_mail(
-            creation_email_subject,
-            creation_email_content.format(signup_url, review_url),
-            settings.DEFAULT_FROM_EMAIL,
-            [self.object.organiser_email]
-        )
-
-        return resp
+        return self.object.send_creation_email
 
 
 class ListCreatedView(DetailView):
