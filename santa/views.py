@@ -86,8 +86,13 @@ class SignupView(CreateView):
     def get_initial(self):
         slug = self.kwargs.get('slug')
         secure_hash = self.kwargs.get('secure_hash')
-        santa_list = get_object_or_404(SantaList, slug=slug, secure_hash_signup=secure_hash)
-        return {'santa_list': santa_list}
+        self.santa_list = get_object_or_404(SantaList, slug=slug, secure_hash_signup=secure_hash)
+        return {'santa_list': self.santa_list}
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['santa_list'] = self.santa_list
+        return context
 
 
 class ThanksView(TemplateView):

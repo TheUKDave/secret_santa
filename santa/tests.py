@@ -8,9 +8,9 @@ class TestSantaList(TestCase):
         content = "Hi {giver}, you are matched with {receiver}"
         self.list = SantaList.objects.create(name='test list', email_subject=subject, email_content=content)
 
-        p1 = Person.objects.create(name='Dave', email='dave@theukdave.com', santa_list=self.list)
-        p2 = Person.objects.create(name='Bob', email='bob@theukdave.com', santa_list=self.list)
-        p3 = Person.objects.create(name='Fred', email='fred@theukdave.com', santa_list=self.list)
+        p1 = Person.objects.create(first_name='dave', last_name='x', email='dave@example.com', santa_list=self.list)
+        p2 = Person.objects.create(first_name='bob', last_name='x', email='bob@example.com', santa_list=self.list)
+        p3 = Person.objects.create(first_name='fred', last_name='x', email='fred@example.com', santa_list=self.list)
 
     def testShuffle(self):
         matched_pairs = self.list.shuffle_recipients()

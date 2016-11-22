@@ -13,7 +13,7 @@ from django.contrib.sites.shortcuts import get_current_site
 class SantaList(models.Model):
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
-    organiser_email = models.EmailField(max_length=200, verbose_name="Your email")
+    organiser_email = models.EmailField(max_length=200)
     email_subject = models.CharField(max_length=200)
     email_content = models.TextField()
 
@@ -96,9 +96,14 @@ class SantaList(models.Model):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=200)
+    first_name = models.CharField(max_length=200)
+    last_name = models.CharField(max_length=200)
     email = models.EmailField(max_length=200)
     santa_list = models.ForeignKey(SantaList)
+
+    @property
+    def name(self):
+        return "{0} {1}".format(self.first_name, self.last_name)
 
     def __str__(self):
         return "{0} - ({1})".format(self.name, self.email)
