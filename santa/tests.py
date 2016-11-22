@@ -18,8 +18,6 @@ class TestSantaList(TestCase):
 
     @patch('django.core.mail.send_mail')
     def testCreateList(self, mail_mock):
-        import pdb
-        pdb.set_trace()
         response = self.client.get(reverse('santa:create'))
         form_data = {
             'name': 'test list 2',
@@ -35,8 +33,8 @@ class TestSantaList(TestCase):
         # We should still only have the original 3 persons in the system
         person_count = Person.objects.count()
         self.assertEquals(person_count, 3)
-        # And no persons attached to the new list
 
+        # Check an email was sent out
         self.assertEquals(mail_mock.called, True)
 
     def testShuffle(self):
@@ -48,9 +46,11 @@ class TestSantaList(TestCase):
         matched_pairs = self.list.shuffle_recipients()
         email_data = self.list.get_email_data(matched_pairs)
 
-    def testFinishList(self):
+    @patch('django.core.mail.send_mass_mail')
+    def testFinishList(self, mail_mock):
         self.list.finish_list()
         list_count = SantaList.objects.count()
         person_count = Person.objects.count()
         self.assertEquals(list_count, 0)
         self.assertEquals(person_count, 0)
+        self.assertEquals(mail_mock.called, True)
