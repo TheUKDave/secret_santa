@@ -2,6 +2,19 @@
 
 {% block content %}
     <h1>Create new Secret Santa List</h1>
+    <div class="instructions">
+        <p>Fill in this form to create your Secret Santa list</p>
+        <ul>
+            <li>Provide a fiendly name for you list, which will appear in URLs for people to sign up to it.</li>
+            <li>Your own email address is needed so that you can be sent the links required to signup and administer your list</li>
+            <li>Customise the email subject and body that will be sent to participants
+                <ul>
+                    <li>Use {giver} to substite the Giver's name</li>
+                    <li>Use {receiver} to substitue the Receiver's name</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
     <form method="post" action="{% url 'santa:create' %}">
         {% csrf_token %}
         {{ form.as_p }}

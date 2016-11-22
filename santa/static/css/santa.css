@@ -25,3 +25,8 @@ textarea {
     width: 23em;
     height: 18em;
 }
+
+div.instructions {
+    font-size: 10pt;
+    color: #999;
+}

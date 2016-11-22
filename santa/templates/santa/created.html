@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Thank you, your Secret Santa list has been created</h1>
+    <h2>NOTE: You are not yet signed up to your own list!</h2>
     <p>To <a href="{% url 'santa:signup' object.secure_hash_signup object.slug %}">sign up to this list</a> as a participant, and to get others to participate, please use:<br/><a href="{% url 'santa:signup' object.secure_hash_signup object.slug %}">{{ signup_url }}</a></p>
     <p>To <a href="{% url 'santa:review' object.secure_hash_review object.slug %}">review and close</a> your list, triggering Santa to send out emails to all poeple that signed up, please use:<br/><a href="{% url 'santa:review' object.secure_hash_review object.slug %}">{{ review_url }}</a></p>
 {% endblock %}

@@ -2,6 +2,10 @@
 
 {% block content %}
     <h1>Signup to Secret Santa</h1>
+    <div class="instructions">
+        <p>Fill in this form to participate in the Secret Santa list: {{ santa_list.name }}</p>
+        <p>Just provide your full name and email address, and when the list is closed, you will receive an email</p>
+    </div>
     <form method="post" action="{{ request.path }}">
         {% csrf_token %}
         {{ form.as_p }}
