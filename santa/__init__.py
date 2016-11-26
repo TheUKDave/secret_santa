@@ -1,5 +1,5 @@
-default_email_subject_template = "Merry Christmas {giver}!"
-default_email_content_template = "Dear {giver},\n\
+default_email_subject_template = "Merry Christmas {giver.first_name}!"
+default_email_content_template = "Dear {giver.first_name},\n\
 \n\
 I'm very busy this year and could use a little help from you, one of my little helpers.\n\
 \n\
