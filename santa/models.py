@@ -75,8 +75,8 @@ class SantaList(models.Model):
         data_list = []
         for giver, receiver in pairs:
             email_to = ["Santa's Little Helper <{0}>".format(giver.email)]
-            content = self.email_content.format(giver=giver.name, receiver=receiver.name)
-            subject = self.email_subject.format(giver=giver.name, receiver=receiver.name)
+            content = self.email_content.format(giver=giver, receiver=receiver)
+            subject = self.email_subject.format(giver=giver, receiver=receiver)
             data_item = (subject, content, settings.DEFAULT_FROM_EMAIL, email_to)
             data_list.append(data_item)
 
@@ -118,4 +118,4 @@ class Person(models.Model):
         return "{0} {1}".format(self.first_name, self.last_name)
 
     def __str__(self):
-        return "{0} - ({1})".format(self.name, self.email)
+        return self.name
